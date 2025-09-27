@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Una Pregunta Importante 😉</title>
     <style>
-        /* Estilos CSS */
+        /* Estilos CSS (Igual que antes) */
         body {
             display: flex;
             justify-content: center;
@@ -15,7 +15,7 @@
             font-family: 'Arial', sans-serif;
             text-align: center;
             
-            background-image: url('Rosas.jpg'); 
+            background-image: url('roses.jpg'); 
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -67,7 +67,7 @@
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease; /* Transición suave para cambios */
+            transition: all 0.3s ease;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
@@ -75,10 +75,9 @@
             background-color: #4CAF50;
             color: white;
             transform: scale(1);
-            position: relative; /* Necesario para la animación */
+            position: relative;
         }
 
-        /* --- NUEVA ANIMACIÓN DE VIBRACIÓN --- */
         @keyframes strong-vibrate {
             0% { transform: scale(var(--scale)) rotate(0deg); }
             25% { transform: scale(var(--scale)) rotate(2deg); }
@@ -88,10 +87,9 @@
         }
 
         .vibrate {
-            animation: strong-vibrate 0.1s ease-in-out infinite; /* Animación rápida e infinita */
-            animation-iteration-count: 3; /* Solo se repite 3 veces */
+            animation: strong-vibrate 0.1s ease-in-out infinite;
+            animation-iteration-count: 3;
         }
-        /* ------------------------------------ */
 
         #siBtn:hover {
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
@@ -122,12 +120,34 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 80%;
-            max-width: 500px;
+            width: 90%;
+            max-width: 700px;
+            box-sizing: border-box;
         }
         #finalMessage p {
             font-size: 1em;
             color: #333;
+            margin-bottom: 20px;
+        }
+
+        #videoContainer {
+            margin-top: 20px;
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; 
+            height: 0;
+            overflow: hidden;
+            background-color: black;
+            border-radius: 10px;
+        }
+
+        #videoContainer video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain; 
         }
     </style>
 </head>
@@ -144,7 +164,13 @@
 
     <div id="finalMessage">
         <p>¡Sabía que dirías que sí! 😉</p>
-        <p>¡Prepárate para una noche inolvidable! ❤️</p>
+        <div id="videoContainer">
+            <video id="proposalVideo" controls autoplay muted playsinline>
+                <source src="proposal_video.mp4" type="video/mp4">
+                Tu navegador no soporta la reproducción de video.
+            </video>
+        </div>
+        <p style="margin-top: 20px;">Prepárate para una bonita noche ❤️</p>
     </div>
 
     <script>
@@ -152,11 +178,12 @@
         const noBtn = document.getElementById('noBtn');
         const mainContainer = document.getElementById('mainContainer');
         const finalMessage = document.getElementById('finalMessage');
+        const proposalVideo = document.getElementById('proposalVideo'); 
 
         let siBtnScale = 1; 
         let noBtnSize = 1;  
 
-        // Función para mover el botón 'No' aleatoriamente (igual que antes)
+        // Función para mover el botón 'No' aleatoriamente
         function moveNoButton() {
             const containerRect = mainContainer.getBoundingClientRect();
             const noBtnRect = noBtn.getBoundingClientRect();
@@ -196,13 +223,8 @@
 
         // Función para activar la vibración
         function activateVibration() {
-            // 1. Añade la clase 'vibrate' para iniciar la animación CSS
             siBtn.classList.add('vibrate');
-
-            // 2. Establece la variable CSS --scale para que la vibración respete el tamaño actual
             siBtn.style.setProperty('--scale', siBtnScale);
-
-            // 3. Elimina la clase 'vibrate' después de que la animación termine (3 repeticiones * 0.1s = 0.3s)
             setTimeout(() => {
                 siBtn.classList.remove('vibrate');
             }, 300); 
@@ -210,25 +232,23 @@
 
         // Evento para el botón 'No'
         noBtn.addEventListener('click', () => {
-            // AUMENTO DE TAMAÑO MÁS GRANDE: Aumenta la escala en 0.3 (antes era 0.2)
             siBtnScale += 0.3; 
-            
-            // Aplica el nuevo tamaño
             siBtn.style.transform = `scale(${siBtnScale})`;
             siBtn.style.padding = `${15 * siBtnScale}px ${30 * siBtnScale}px`; 
             siBtn.style.fontSize = `${1.5 * siBtnScale}em`; 
 
-            // Activa la vibración
+            // LÍNEA ELIMINADA: siBtn.textContent = 'Te apetezco mucho'; 
+            
             activateVibration();
-
-            // Mueve el botón 'No'
             moveNoButton(); 
         });
 
-        // Evento para el botón 'Sí' (igual que antes)
+        // Evento para el botón 'Sí'
         siBtn.addEventListener('click', () => {
             mainContainer.style.display = 'none';
             finalMessage.style.display = 'block';
+            proposalVideo.play(); 
+            proposalVideo.muted = false; 
         });
     </script>
 </body>
