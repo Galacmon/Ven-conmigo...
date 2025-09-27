@@ -1,0 +1,235 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Una Pregunta Importante 😉</title>
+    <style>
+        /* Estilos CSS */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            
+            background-image: url('roses.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            overflow: hidden;
+        }
+
+        .container {
+            padding: 40px;
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        h1 {
+            color: #d81b60;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #333;
+            font-size: 1.2em;
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+
+        .emoji {
+            font-size: 3em;
+            display: block;
+            margin-top: 15px;
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.5em;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease; /* Transición suave para cambios */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #siBtn {
+            background-color: #4CAF50;
+            color: white;
+            transform: scale(1);
+            position: relative; /* Necesario para la animación */
+        }
+
+        /* --- NUEVA ANIMACIÓN DE VIBRACIÓN --- */
+        @keyframes strong-vibrate {
+            0% { transform: scale(var(--scale)) rotate(0deg); }
+            25% { transform: scale(var(--scale)) rotate(2deg); }
+            50% { transform: scale(var(--scale)) rotate(-2deg); }
+            75% { transform: scale(var(--scale)) rotate(2deg); }
+            100% { transform: scale(var(--scale)) rotate(0deg); }
+        }
+
+        .vibrate {
+            animation: strong-vibrate 0.1s ease-in-out infinite; /* Animación rápida e infinita */
+            animation-iteration-count: 3; /* Solo se repite 3 veces */
+        }
+        /* ------------------------------------ */
+
+        #siBtn:hover {
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        #noBtn {
+            background-color: #f44336;
+            color: white;
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%) scale(1);
+            white-space: nowrap;
+        }
+
+        #finalMessage {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            font-size: 2em;
+            color: #d81b60;
+            font-weight: bold;
+            z-index: 10;
+            display: none;
+            text-align: center;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 500px;
+        }
+        #finalMessage p {
+            font-size: 1em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainContainer">
+        <h1>¿Quieres pasar esta noche solo conmigo?</h1>
+        <p>¡Tengo planes geniales! 🥰</p>
+        <div class="buttons-container">
+            <button id="siBtn">Sí</button>
+            <button id="noBtn">No</button>
+        </div>
+        <span class="emoji">🥂✨</span>
+    </div>
+
+    <div id="finalMessage">
+        <p>¡Sabía que dirías que sí! 😉</p>
+        <p>¡Prepárate para una noche inolvidable! ❤️</p>
+    </div>
+
+    <script>
+        const siBtn = document.getElementById('siBtn');
+        const noBtn = document.getElementById('noBtn');
+        const mainContainer = document.getElementById('mainContainer');
+        const finalMessage = document.getElementById('finalMessage');
+
+        let siBtnScale = 1; 
+        let noBtnSize = 1;  
+
+        // Función para mover el botón 'No' aleatoriamente (igual que antes)
+        function moveNoButton() {
+            const containerRect = mainContainer.getBoundingClientRect();
+            const noBtnRect = noBtn.getBoundingClientRect();
+
+            const maxX = window.innerWidth - noBtnRect.width;
+            const maxY = window.innerHeight - noBtnRect.height;
+
+            let randomX = Math.random() * maxX;
+            let randomY = Math.random() * maxY;
+
+            const siBtnRect = siBtn.getBoundingClientRect();
+            const safetyMargin = 150;
+
+            if (
+                randomX < siBtnRect.right + safetyMargin && 
+                randomX + noBtnRect.width > siBtnRect.left - safetyMargin &&
+                randomY < siBtnRect.bottom + safetyMargin &&
+                randomY + noBtnRect.height > siBtnRect.top - safetyMargin
+            ) {
+                 randomX = Math.min(randomX + 200, maxX - noBtnRect.width);
+                 if (randomX + noBtnRect.width > maxX) {
+                     randomX = Math.max(randomX - 400, 0);
+                 }
+                 randomY = Math.min(randomY + 100, maxY - noBtnRect.height);
+            }
+
+            noBtn.style.position = 'fixed'; 
+            noBtn.style.left = `${randomX}px`;
+            noBtn.style.top = `${randomY}px`;
+            
+            noBtnSize *= 0.8; 
+            if (noBtnSize < 0.1) {
+                noBtnSize = 0.1;
+            }
+            noBtn.style.transform = `scale(${noBtnSize})`;
+        }
+
+        // Función para activar la vibración
+        function activateVibration() {
+            // 1. Añade la clase 'vibrate' para iniciar la animación CSS
+            siBtn.classList.add('vibrate');
+
+            // 2. Establece la variable CSS --scale para que la vibración respete el tamaño actual
+            siBtn.style.setProperty('--scale', siBtnScale);
+
+            // 3. Elimina la clase 'vibrate' después de que la animación termine (3 repeticiones * 0.1s = 0.3s)
+            setTimeout(() => {
+                siBtn.classList.remove('vibrate');
+            }, 300); 
+        }
+
+        // Evento para el botón 'No'
+        noBtn.addEventListener('click', () => {
+            // AUMENTO DE TAMAÑO MÁS GRANDE: Aumenta la escala en 0.3 (antes era 0.2)
+            siBtnScale += 0.3; 
+            
+            // Aplica el nuevo tamaño
+            siBtn.style.transform = `scale(${siBtnScale})`;
+            siBtn.style.padding = `${15 * siBtnScale}px ${30 * siBtnScale}px`; 
+            siBtn.style.fontSize = `${1.5 * siBtnScale}em`; 
+
+            // Activa la vibración
+            activateVibration();
+
+            // Mueve el botón 'No'
+            moveNoButton(); 
+        });
+
+        // Evento para el botón 'Sí' (igual que antes)
+        siBtn.addEventListener('click', () => {
+            mainContainer.style.display = 'none';
+            finalMessage.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
